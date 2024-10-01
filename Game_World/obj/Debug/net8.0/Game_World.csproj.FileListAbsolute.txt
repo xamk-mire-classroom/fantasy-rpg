@@ -1,0 +1,15 @@
+C:\Users\niras\Desktop\UniWork\3rd Year\Design patterns & Object Oriented\Game_World\Game_World\bin\Debug\net8.0\Game_World.exe
+C:\Users\niras\Desktop\UniWork\3rd Year\Design patterns & Object Oriented\Game_World\Game_World\bin\Debug\net8.0\Game_World.deps.json
+C:\Users\niras\Desktop\UniWork\3rd Year\Design patterns & Object Oriented\Game_World\Game_World\bin\Debug\net8.0\Game_World.runtimeconfig.json
+C:\Users\niras\Desktop\UniWork\3rd Year\Design patterns & Object Oriented\Game_World\Game_World\bin\Debug\net8.0\Game_World.dll
+C:\Users\niras\Desktop\UniWork\3rd Year\Design patterns & Object Oriented\Game_World\Game_World\bin\Debug\net8.0\Game_World.pdb
+C:\Users\niras\Desktop\UniWork\3rd Year\Design patterns & Object Oriented\Game_World\Game_World\obj\Debug\net8.0\Game_World.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\niras\Desktop\UniWork\3rd Year\Design patterns & Object Oriented\Game_World\Game_World\obj\Debug\net8.0\Game_World.AssemblyInfoInputs.cache
+C:\Users\niras\Desktop\UniWork\3rd Year\Design patterns & Object Oriented\Game_World\Game_World\obj\Debug\net8.0\Game_World.AssemblyInfo.cs
+C:\Users\niras\Desktop\UniWork\3rd Year\Design patterns & Object Oriented\Game_World\Game_World\obj\Debug\net8.0\Game_World.csproj.CoreCompileInputs.cache
+C:\Users\niras\Desktop\UniWork\3rd Year\Design patterns & Object Oriented\Game_World\Game_World\obj\Debug\net8.0\Game_World.sourcelink.json
+C:\Users\niras\Desktop\UniWork\3rd Year\Design patterns & Object Oriented\Game_World\Game_World\obj\Debug\net8.0\Game_World.dll
+C:\Users\niras\Desktop\UniWork\3rd Year\Design patterns & Object Oriented\Game_World\Game_World\obj\Debug\net8.0\refint\Game_World.dll
+C:\Users\niras\Desktop\UniWork\3rd Year\Design patterns & Object Oriented\Game_World\Game_World\obj\Debug\net8.0\Game_World.pdb
+C:\Users\niras\Desktop\UniWork\3rd Year\Design patterns & Object Oriented\Game_World\Game_World\obj\Debug\net8.0\Game_World.genruntimeconfig.cache
+C:\Users\niras\Desktop\UniWork\3rd Year\Design patterns & Object Oriented\Game_World\Game_World\obj\Debug\net8.0\ref\Game_World.dll
