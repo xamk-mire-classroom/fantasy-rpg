@@ -1,4 +1,6 @@
-﻿public class CharacterFactory
+﻿
+namespace Game_World;
+public class CharacterFactory
 {
     public static Character CreateCharacter(string characterType, string name)
     {
