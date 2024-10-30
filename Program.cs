@@ -68,5 +68,46 @@ class Program
 
         commonArmor.DisplayInfo();  // Output: Item: Leather Armor, Rarity: Common, Defense: 15, Durability: 30
         legendaryArmor.DisplayInfo();  // Output: Item: Dragon Armor, Rarity: Legendary, Defense: 600, Durability: 1000
+
+
+        EnemyFactory factory = new EnemyFactory();
+
+        // Create a normal Slime
+        Enemy slime = factory.CreateEnemy("Slime", "Normal", 30, 0, 5, 5);
+        slime.Attack();
+        slime.Move();
+
+        // Create a King Slime with enhanced stats
+        Enemy kingSlime = factory.CreateEnemy("Slime", "King", 100, 0, 20, 10);
+        kingSlime.Attack();
+        kingSlime.Move();
+
+        // Create a Goblin
+        Enemy goblin = factory.CreateEnemy("Goblin", "Warrior", 50, 10, 10, 10);
+        goblin.Attack();
+        goblin.Move();
+
+        // Create a powerful Dragon
+        Enemy dragon = factory.CreateEnemy("Dragon", "Ancient", 500, 200, 100, 50);
+        dragon.Attack();
+        dragon.Move();
+
+
+        QuestManager questManager = new QuestManager();
+
+        // Create observers
+        PlayerCharacter player1 = new PlayerCharacter("Hero");
+        NPC npc1 = new NPC("Villager");
+
+        // Subscribe observers to the quest manager
+        questManager.Subscribe(player1);
+        questManager.Subscribe(npc1);
+
+        // Update quest status
+        questManager.UpdateQuestStatus("Quest Started");
+
+        // Unsubscribe one observer and change the quest status
+        questManager.Unsubscribe(npc1);
+        questManager.UpdateQuestStatus("Quest Completed");
     }
 }
