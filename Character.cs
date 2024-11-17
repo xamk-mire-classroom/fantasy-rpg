@@ -5,10 +5,42 @@
     {
         // Properties common to all characters
         public string Name { get; private set; }
-        public int Health { get; protected set; }
+        public int Health { get; set; }
         public int Mana { get; protected set; }
         public int Strength { get; protected set; }
         public int Agility { get; protected set; }
+
+        public int AttackPower { get; set; }
+        public bool IsDefending { get; private set; }
+        public int MaxHealth { get; set; }
+        public int HealAmount { get; set; }
+
+        public Position Position { get; set; }
+
+      
+
+        public Character(string name, Position startPosition)
+        {
+            Name = name;
+            Position = startPosition;
+        }
+        public Character(string name, int health, int attackPower, int healAmount, Position initialPosition, int maxHealth)
+        {
+            Name = name;
+            Health = health;
+            AttackPower = attackPower;
+            HealAmount = healAmount;
+            Position = initialPosition ?? throw new ArgumentNullException(nameof(initialPosition));
+            Health = maxHealth;
+        }
+        public void EnterDefensiveStance()
+        {
+            IsDefending = true;
+            Console.WriteLine($"{Name} is now in a defensive stance, reducing incoming damage.");
+            // Additional logic for defense mode can be added here
+        }
+
+
 
         // Private fields to manage the state and action strategy
         private ICharacterState _currentState;
@@ -154,4 +186,7 @@
             Console.WriteLine($"{character.Name} heals and restores health.");
         }
     }
+
+
+
 }
