@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Game_World
 {
@@ -7,86 +6,135 @@ namespace Game_World
     {
         static void Main(string[] args)
         {
-            // Singleton GameWorld
-            var gameWorld = GameWorld.Instance;
-            gameWorld.UpdateGameState("Night", "Rainy");
-            Console.WriteLine($"Time of Day: {gameWorld.TimeOfDay}, Weather: {gameWorld.Weather}");
+            // Get the single instance of GameWorld
+            GameWorld gameWorld = GameWorld.Instance;
 
-            // Character Creation using Factory
-            Character warrior = CharacterFactory.CreateCharacter("Warrior", "Conan");
-            Character mage = CharacterFactory.CreateCharacter("Mage", "Gandalf");
-            Character archer = CharacterFactory.CreateCharacter("Archer", "Legolas");
+            // Display the current state of the game world
+            gameWorld.DisplayState();
 
-            // Display character stats
-            warrior.DisplayStats();
-            mage.DisplayStats();
-            archer.DisplayStats();
+            // Modify game state
+            gameWorld.TimeOfDay = "Evening";
+            gameWorld.Weather = "Rainy";
 
-            // Set strategies and states
-            warrior.SetActionStrategy(new MeleeAction());
-            warrior.SetState(new ActionState());
-            warrior.HandleState();
+            // Display the updated state
+            Console.WriteLine("\nUpdated Game State:");
+            gameWorld.DisplayState();
 
-            mage.SetActionStrategy(new MagicAction());
-            mage.SetState(new ActionState());
-            mage.HandleState();
+            // Character Creation
+            Console.WriteLine("\nWelcome to the Character Creation!");
 
-            archer.SetState(new DefendingState());
-            archer.HandleState();
+            Console.Write("Enter character name: ");
+            string characterName = Console.ReadLine();
 
-            // Create items using factories
-            CreateItems();
+            Console.Write("Enter character type (Warrior, Mage, Archer): ");
+            string characterType = Console.ReadLine();
 
-            // Initialize GameController
-            GameController gameController = new GameController();
-
-            // Command Setup for Warrior
-            SetupCharacterCommands(gameController, warrior, mage);
-
-
-
-
-            Console.WriteLine("\nGame started! Press keys to control your character (Q to quit):");
-            gameController.MapKey(ConsoleKey.A, new AttackCommand(warrior, mage)); // A for Attack
-            gameController.MapKey(ConsoleKey.H, new HealCommand(warrior));         // H for Heal
-            gameController.MapKey(ConsoleKey.M, new MoveCommand(warrior, new Position(5, 5))); // M for Move
-            gameController.MapKey(ConsoleKey.D, new DefendCommand(warrior));       // D for Defend
-           
-
-            while (true)
+            Character character;
+            try
             {
-                gameController.HandleInput();
+                // Create the character using the factory
+                character = CharacterFactory.CreateCharacter(characterType, characterName);
+
+                // Display character stats
+                Console.WriteLine("\nCharacter Created!");
+                character.DisplayStats();
             }
-        }
+            catch (ArgumentException e)
+            {
+                Console.WriteLine(e.Message);
+                return;
+            }
 
-        // Creates items using factories and displays them
-        static void CreateItems()
-        {
-            // Create Weapon, Potion, and Armor
-            Weapon sword = new Weapon("Excalibur", ItemRarity.Legendary, 150, WeaponTypeEnum.Melee);
-            Potion healingPotion = new Potion("Healing Potion", ItemRarity.Common, "Restores 50 health", 30);
-            Armor dragonArmor = new Armor("Dragon Plate", ItemRarity.Rare, 100, 200);
+            // Enemy Creation
+            Console.WriteLine("\nEnemy Creation!");
 
-            // Display item information
-            sword.DisplayInfo();        // Output: Item: Excalibur, Rarity: Legendary, Damage: 150, Weapon Type: Melee
-            healingPotion.DisplayInfo(); // Output: Item: Healing Potion, Rarity: Common, Effect: Restores 50 health
-            dragonArmor.DisplayInfo();   // Output: Item: Dragon Plate, Rarity: Rare, Defense: 100, Durability: 200
-        }
+            Console.Write("Enter enemy type (Slime, Goblin, Dragon): ");
+            string enemyType = Console.ReadLine();
 
-        // Setup Commands for a Character
-        static void SetupCharacterCommands(GameController gameController, Character character, Character target)
-        {
-            ICommand attackCommand = new AttackCommand(character, target);
+            Console.Write("Enter enemy rank (Normal, Elite, Boss): ");
+            string enemyRank = Console.ReadLine();
+
+            Enemy enemy;
+            try
+            {
+                // Create enemy using the factory
+                enemy = EnemyFactory.CreateEnemy(enemyType, enemyRank);
+
+                // Display enemy stats and actions
+                enemy.DisplayStats();
+                enemy.Move();
+                enemy.Attack();
+            }
+            catch (ArgumentException e)
+            {
+                Console.WriteLine(e.Message);
+                return;
+            }
+
+            // Quest Notifications
+            QuestManager questManager = new QuestManager();
+            PlayerCharacter player = new PlayerCharacter(characterName);
+            QuestNPC villager = new QuestNPC("Villager");
+            QuestNPC blacksmith = new QuestNPC("Blacksmith");
+
+            questManager.RegisterObserver(player);
+            questManager.RegisterObserver(villager);
+            questManager.RegisterObserver(blacksmith);
+
+            questManager.ChangeQuestState("Quest Started: Defend the Village");
+            questManager.ChangeQuestState("Quest Updated: Gather Reinforcements");
+            questManager.ChangeQuestState("Quest Completed: Victory!");
+            questManager.UnregisterObserver(villager);
+            questManager.ChangeQuestState("New Quest Started: Repair the Village!");
+
+            // Commands and Controller
+            GameController gameController = new GameController();
+            Controller controller = new Controller();
+
+            ICommand attackCommand = new AttackCommand(character, enemy);
             ICommand defendCommand = new DefendCommand(character);
             ICommand healCommand = new HealCommand(character);
-            ICommand moveCommand = new MoveCommand(character, new Position(3, 3));
+            ICommand moveCommand = new MoveCommand(character, "Forest");
 
-            gameController.MapKey(ConsoleKey.A, attackCommand); // A => Attack
-            gameController.MapKey(ConsoleKey.D, defendCommand); // D => Defend
-            gameController.MapKey(ConsoleKey.H, healCommand);   // H => Heal
-            gameController.MapKey(ConsoleKey.M, moveCommand);   // M => Move
+            // Map keys to commands
+            controller.MapKeyToCommand(ConsoleKey.A, attackCommand);
+            controller.MapKeyToCommand(ConsoleKey.D, defendCommand);
+            controller.MapKeyToCommand(ConsoleKey.H, healCommand);
+            controller.MapKeyToCommand(ConsoleKey.M, moveCommand);
 
-            Console.WriteLine("\nCommands have been set for the character.");
+            Console.WriteLine("\nWelcome to the Game!");
+            Console.WriteLine("Use the following keys to control your character:");
+            Console.WriteLine("A - Attack | D - Defend | H - Heal | M - Move | Q - Quit");
+
+            // Game loop
+            bool isRunning = true;
+            while (isRunning)
+            {
+                Console.Write("\nPress a key: ");
+                ConsoleKey key = Console.ReadKey(true).Key;
+
+                if (key == ConsoleKey.Q)
+                {
+                    Console.WriteLine("\nExiting the game. Goodbye!");
+                    isRunning = false;
+                }
+                else
+                {
+                    controller.HandleKeyPress(key);
+
+                    // Check if the enemy is defeated
+                    if (enemy.Health <= 0)
+                    {
+                        Console.WriteLine($"\n{enemy.Name} has been defeated! You win!");
+                        isRunning = false; // End the game loop
+                    }
+                }
+            }
+
+            // Final Stats
+            Console.WriteLine("\nFinal Stats:");
+            character.DisplayStats();
+            enemy.DisplayStats();
         }
     }
 }

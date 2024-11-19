@@ -1,6 +1,15 @@
-﻿public abstract class ItemFactory
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Game_World
 {
-    public abstract Weapon CreateWeapon(string name, WeaponTypeEnum weaponType);
-    public abstract Potion CreatePotion(string name, string effect, int duration);
-    public abstract Armor CreateArmor(string name, int defense, int durability);
+    public interface ItemFactory
+    {
+        Weapon CreateWeapon(string name, WeaponTypeEnum weaponType);
+        Potion CreatePotion(string name, string effect);
+        Armor CreateArmor(string name, int defense);
+    }
 }

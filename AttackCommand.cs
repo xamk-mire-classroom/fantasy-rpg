@@ -1,35 +1,29 @@
-﻿using System;
-
-namespace Game_World
+﻿namespace Game_World
 {
     public class AttackCommand : ICommand
     {
-        private readonly Character _attacker; // Use consistent naming
-        private readonly Character _target;
+        private Character _character;
+        private Enemy _target;
 
-        public AttackCommand(Character attacker, Character target)
+        public AttackCommand(Character character, Enemy target)
         {
-            _attacker = attacker;
+            _character = character;
             _target = target;
         }
 
         public void Execute()
         {
-            if (_target == null || _attacker == null)
-            {
-                Console.WriteLine("Invalid attack. Either attacker or target is missing.");
-                return;
-            }
+            Console.WriteLine($"{_character.Name} attacks {_target.Name}!");
+            _target.Health -= _character.Strength;
 
-            Console.WriteLine($"{_attacker.Name} attacks {_target.Name} for {_attacker.AttackPower} damage!");
-            _target.Health -= _attacker.AttackPower;
-
-            // Optionally check if target is defeated
             if (_target.Health <= 0)
             {
-                Console.WriteLine($"{_target.Name} has been defeated!");
                 _target.Health = 0; // Prevent negative health
+                Console.WriteLine($"{_target.Name} has been defeated!");
+                return; // Exit the method as the enemy is already defeated
             }
+
+            Console.WriteLine($"{_target.Name}'s health is now {_target.Health}.");
         }
     }
 }

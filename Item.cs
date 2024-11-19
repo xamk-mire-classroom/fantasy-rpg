@@ -1,20 +1,22 @@
-﻿using Game_World;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public abstract class Item  // Base class for all items
+namespace Game_World
 {
-    public string Name { get; private set; }  // Common property for all items
-    public ItemRarity Rarity { get; private set; }  // Common property for rarity
-
-    // Constructor to initialize item name and rarity
-    protected Item(string name, ItemRarity rarity)
+    public abstract class Item
     {
-        Name = name;
-        Rarity = rarity;
-    }
+        public string Name { get; set; }
+        public ItemRarity Rarity { get; set; }
 
-    // Method to display item info (optional)
-    public virtual void DisplayInfo()
-    {
-        Console.WriteLine($"Item: {Name}, Rarity: {Rarity}");
+        protected Item(string name, ItemRarity rarity)
+        {
+            Name = name;
+            Rarity = rarity;
+        }
+
+        public abstract void DisplayStats();
     }
 }

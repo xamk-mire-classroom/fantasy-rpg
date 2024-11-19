@@ -1,19 +1,26 @@
-﻿using Game_World;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public class CommonItemFactory : ItemFactory
+namespace Game_World
 {
-    public override Weapon CreateWeapon(string name, WeaponTypeEnum weaponType)
+    public class CommonItemFactory : ItemFactory
     {
-        return new Weapon(name, ItemRarity.Common, 10, weaponType);  // Low damage for common weapons
-    }
+        public Weapon CreateWeapon(string name, WeaponTypeEnum weaponType)
+        {
+            return new Weapon(name, ItemRarity.Common, 10, weaponType);
+        }
 
-    public override Potion CreatePotion(string name, string effect, int duration)
-    {
-        return new Potion(name, ItemRarity.Common, effect, duration);  // Short duration for common potions
-    }
+        public Potion CreatePotion(string name, string effect)
+        {
+            return new Potion(name, ItemRarity.Common, effect, 5);
+        }
 
-    public override Armor CreateArmor(string name, int defense, int durability)
-    {
-        return new Armor(name, ItemRarity.Common, defense, durability);  // Low defense and durability
+        public Armor CreateArmor(string name, int defense)
+        {
+            return new Armor(name, ItemRarity.Common, defense, 10);
+        }
     }
 }

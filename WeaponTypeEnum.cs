@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Game_World
 {
-    public interface IActionStrategy
+    public enum WeaponTypeEnum
     {
-        void PerformAction(Character character);
+        Melee,
+        Ranged
     }
 }

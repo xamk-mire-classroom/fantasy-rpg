@@ -1,22 +1,27 @@
-﻿using Game_World;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public class Armor : Item
+namespace Game_World
 {
-    public int Defense { get; private set; }  // Unique attribute for Armor (defense level)
-    public int Durability { get; private set; }  // Durability of the armor
 
-    // Constructor to initialize armor-specific properties
-    public Armor(string name, ItemRarity rarity, int defense, int durability)
-        : base(name, rarity)  // Call the base class constructor
+    public class Armor : Item
     {
-        Defense = defense;
-        Durability = durability;
-    }
+        public int Defense { get; set; }
+        public int Durability { get; set; }
 
-    // Override the method to display Armor-specific details
-    public override void DisplayInfo()
-    {
-        base.DisplayInfo();  // Call base method to display common item info
-        Console.WriteLine($"Defense: {Defense}, Durability: {Durability}");
+        public Armor(string name, ItemRarity rarity, int defense, int durability)
+            : base(name, rarity)
+        {
+            Defense = defense;
+            Durability = durability;
+        }
+
+        public override void DisplayStats()
+        {
+            Console.WriteLine($"Armor: {Name} | Rarity: {Rarity} | Defense: {Defense} | Durability: {Durability}");
+        }
     }
 }

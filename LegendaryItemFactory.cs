@@ -1,19 +1,26 @@
-﻿using Game_World;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public class LegendaryItemFactory : ItemFactory
+namespace Game_World
 {
-    public override Weapon CreateWeapon(string name, WeaponTypeEnum weaponType)
+    public class LegendaryItemFactory : ItemFactory
     {
-        return new Weapon(name, ItemRarity.Legendary, 100, weaponType);  // Legendary damage for legendary items
-    }
+        public Weapon CreateWeapon(string name, WeaponTypeEnum weaponType)
+        {
+            return new Weapon(name, ItemRarity.Legendary, 100, weaponType);
+        }
 
-    public override Potion CreatePotion(string name, string effect, int duration)
-    {
-        return new Potion(name, ItemRarity.Legendary, effect, duration * 4);  // Legendary duration for potions
-    }
+        public Potion CreatePotion(string name, string effect)
+        {
+            return new Potion(name, ItemRarity.Legendary, effect, 30);
+        }
 
-    public override Armor CreateArmor(string name, int defense, int durability)
-    {
-        return new Armor(name, ItemRarity.Legendary, defense * 4, durability * 2);  // Legendary defense and durability
+        public Armor CreateArmor(string name, int defense)
+        {
+            return new Armor(name, ItemRarity.Legendary, defense, 100);
+        }
     }
 }

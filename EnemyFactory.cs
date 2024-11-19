@@ -1,28 +1,56 @@
-﻿public class EnemyFactory
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Game_World
 {
-    private Dictionary<string, Enemy> _enemyPrototypes = new Dictionary<string, Enemy>();
-
-    public EnemyFactory()
+    public static class EnemyFactory
     {
-        // Initialize prototypes with base stats
-        _enemyPrototypes["Slime"] = new Slime("Normal", 30, 0, 5, 5);
-        _enemyPrototypes["Goblin"] = new Goblin("Normal", 50, 10, 10, 10);
-        _enemyPrototypes["Dragon"] = new Dragon("Normal", 200, 100, 50, 30);
-    }
-
-    public Enemy CreateEnemy(string type, string rank, int health, int mana, int strength, int agility)
-    {
-        if (_enemyPrototypes.ContainsKey(type))
+        public static Enemy CreateEnemy(string type, string rank)
         {
-            // Clone the prototype and modify its properties for the specific instance
-            Enemy enemy = _enemyPrototypes[type].Clone();
-            enemy.Rank = rank;
-            enemy.Health = health;
-            enemy.Mana = mana;
-            enemy.Strength = strength;
-            enemy.Agility = agility;
-            return enemy;
+            return type.ToLower() switch
+            {
+                "slime" => CreateSlime(rank),
+                "goblin" => CreateGoblin(rank),
+                "dragon" => CreateDragon(rank),
+                _ => throw new ArgumentException("Invalid enemy type")
+            };
         }
-        throw new ArgumentException("Unknown enemy type.");
+
+        private static Enemy CreateSlime(string rank)
+        {
+            return rank.ToLower() switch
+            {
+                "normal" => new Slime("Slime", "Normal", 50, 10, 5, 2),
+                "elite" => new Slime("Slime", "Elite", 100, 20, 10, 5),
+                "boss" => new Slime("King Slime", "Boss", 200, 30, 20, 10),
+                _ => throw new ArgumentException("Invalid rank")
+            };
+        }
+
+        private static Enemy CreateGoblin(string rank)
+        {
+            return rank.ToLower() switch
+            {
+                "normal" => new Goblin("Goblin", "Normal", 80, 15, 10, 8),
+                "elite" => new Goblin("Goblin Warrior", "Elite", 150, 25, 20, 15),
+                "boss" => new Goblin("Goblin King", "Boss", 250, 40, 30, 20),
+                _ => throw new ArgumentException("Invalid rank")
+            };
+        }
+
+        private static Enemy CreateDragon(string rank)
+        {
+            return rank.ToLower() switch
+            {
+                "normal" => new Dragon("Young Dragon", "Normal", 300, 50, 40, 25),
+                "elite" => new Dragon("Adult Dragon", "Elite", 500, 70, 60, 40),
+                "boss" => new Dragon("Ancient Dragon", "Boss", 1000, 100, 80, 50),
+                _ => throw new ArgumentException("Invalid rank")
+            };
+        }
     }
 }

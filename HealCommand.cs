@@ -1,33 +1,26 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Game_World
 {
     public class HealCommand : ICommand
     {
-        private readonly Character _character;
+        private Character _character;
 
         public HealCommand(Character character)
         {
-            _character = character ?? throw new ArgumentNullException(nameof(character));
+            _character = character;
         }
 
         public void Execute()
         {
-            if (_character == null)
-            {
-                Console.WriteLine("No character available to heal.");
-                return;
-            }
-
-            Console.WriteLine($"{_character.Name} heals for {_character.HealAmount} health points!");
-            _character.Health += _character.HealAmount;
-
-            // Optional: Prevent exceeding maximum health
-            if (_character.Health > _character.MaxHealth)
-            {
-                _character.Health = _character.MaxHealth;
-                Console.WriteLine($"{_character.Name} is now at full health!");
-            }
+            Console.WriteLine($"{_character.Name} heals!");
+            _character.Health += 20; // Arbitrary healing value
+            Console.WriteLine($"{_character.Name}'s health is now {_character.Health}.");
         }
     }
 }
+

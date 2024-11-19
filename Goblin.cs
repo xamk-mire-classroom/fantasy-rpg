@@ -1,20 +1,25 @@
-﻿public class Goblin : Enemy
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Game_World
 {
-    public Goblin(string rank, int health, int mana, int strength, int agility)
-        : base("Goblin", health, mana, strength, agility, rank) { }
-
-    public override void Attack()
+    public class Goblin : Enemy
     {
-        Console.WriteLine($"{Name} ({Rank}) attacks with a quick dagger strike!");
-    }
+        public Goblin(string name, string rank, int health, int mana, int strength, int agility)
+            : base(name, rank)
+        {
+            Health = health;
+            Mana = mana;
+            Strength = strength;
+            Agility = agility;
+        }
 
-    public override void Move()
-    {
-        Console.WriteLine($"{Name} ({Rank}) moves stealthily.");
-    }
-
-    public override Enemy Clone()
-    {
-        return (Enemy)MemberwiseClone();
+        public override void Move()
+        {
+            Console.WriteLine($"{Name} runs swiftly.");
+        }
     }
 }

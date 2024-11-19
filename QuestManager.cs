@@ -1,29 +1,45 @@
-﻿public class QuestManager : ISubject
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Game_World
 {
-    private List<IObserver> observers = new List<IObserver>();
-    private string questStatus;
-
-    public void Subscribe(IObserver observer)
+    public class QuestManager : ISubject
     {
-        observers.Add(observer);
-    }
+        private readonly List<IObserver> observers;
 
-    public void Unsubscribe(IObserver observer)
-    {
-        observers.Remove(observer);
-    }
-
-    public void NotifyObservers(string questStatus)
-    {
-        foreach (IObserver observer in observers)
+        public QuestManager()
         {
-            observer.Update(questStatus);
+            observers = new List<IObserver>();
         }
-    }
 
-    public void UpdateQuestStatus(string newStatus)
-    {
-        questStatus = newStatus;
-        NotifyObservers(questStatus);
+        public void RegisterObserver(IObserver observer)
+        {
+            observers.Add(observer);
+            Console.WriteLine($"{observer.GetType().Name} has subscribed to quest notifications.");
+        }
+
+        public void UnregisterObserver(IObserver observer)
+        {
+            observers.Remove(observer);
+            Console.WriteLine($"{observer.GetType().Name} has unsubscribed from quest notifications.");
+        }
+
+        public void NotifyObservers(string questStatus)
+        {
+            foreach (var observer in observers)
+            {
+                observer.Update(questStatus);
+            }
+        }
+
+        // Simulate quest state changes
+        public void ChangeQuestState(string questStatus)
+        {
+            Console.WriteLine($"\nQuest Status Changed: {questStatus}");
+            NotifyObservers(questStatus);
+        }
     }
 }

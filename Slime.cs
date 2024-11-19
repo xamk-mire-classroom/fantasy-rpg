@@ -1,20 +1,19 @@
-﻿public class Slime : Enemy
+﻿namespace Game_World
 {
-    public Slime(string rank, int health, int mana, int strength, int agility)
-        : base("Slime", health, mana, strength, agility, rank) { }
-
-    public override void Attack()
+    public class Slime : Enemy
     {
-        Console.WriteLine($"{Name} ({Rank}) attacks with a weak acid splash!");
-    }
+        public Slime(string name, string rank, int health, int mana, int strength, int agility)
+            : base(name, rank)
+        {
+            Health = health;
+            Mana = mana;
+            Strength = strength;
+            Agility = agility;
+        }
 
-    public override void Move()
-    {
-        Console.WriteLine($"{Name} ({Rank}) slowly moves by slithering.");
-    }
-
-    public override Enemy Clone()
-    {
-        return (Enemy)MemberwiseClone();
+        public override void Move()
+        {
+            Console.WriteLine($"{Name} slithers slowly.");
+        }
     }
 }

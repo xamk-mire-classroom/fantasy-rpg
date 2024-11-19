@@ -1,33 +1,13 @@
-﻿using Game_World;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public interface ICharacterState
+namespace Game_World
 {
-    void HandleState(Character character);
-
-
-    public class IdleState : ICharacterState
+    public interface ICharacterState
     {
-        public void HandleState(Character character)
-        {
-            Console.WriteLine($"{character.Name} is idle and doing nothing.");
-        }
-    }
-
-    public class ActionState : ICharacterState
-    {
-        public void HandleState(Character character)
-        {
-            Console.WriteLine($"{character.Name} is ready to perform an action.");
-            character.PerformAction(); // Execute the current action strategy (e.g., MeleeAction, MagicAction)
-        }
-    }
-
-    public class DefendingState : ICharacterState
-    {
-        public void HandleState(Character character)
-        {
-            Console.WriteLine($"{character.Name} is defending and cannot perform other actions.");
-        }
+        void HandleState(Character character);
     }
 }
-

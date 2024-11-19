@@ -1,28 +1,26 @@
-﻿using Game_World;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public enum WeaponTypeEnum  // Enum to classify weapon types
+namespace Game_World
 {
-    Melee,
-    Ranged
-}
-
-public class Weapon : Item
-{
-    public int Damage { get; private set; }  // Unique attribute for Weapon
-    public WeaponTypeEnum WeaponType { get; private set; }  // Type of weapon (Melee or Ranged)
-
-    // Constructor to initialize weapon-specific properties
-    public Weapon(string name, ItemRarity rarity, int damage, WeaponTypeEnum weaponType)
-        : base(name, rarity)  // Call the base class constructor
+    public class Weapon : Item
     {
-        Damage = damage;
-        WeaponType = weaponType;
-    }
+        public int Damage { get; set; }
+        public WeaponTypeEnum WeaponType { get; set; }
 
-    // Override the method to display Weapon-specific details
-    public override void DisplayInfo()
-    {
-        base.DisplayInfo();  // Call base method to display common item info
-        Console.WriteLine($"Damage: {Damage}, Weapon Type: {WeaponType}");
+        public Weapon(string name, ItemRarity rarity, int damage, WeaponTypeEnum weaponType)
+            : base(name, rarity)
+        {
+            Damage = damage;
+            WeaponType = weaponType;
+        }
+
+        public override void DisplayStats()
+        {
+            Console.WriteLine($"Weapon: {Name} | Rarity: {Rarity} | Damage: {Damage} | Type: {WeaponType}");
+        }
     }
 }

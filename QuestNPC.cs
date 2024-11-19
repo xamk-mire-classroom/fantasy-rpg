@@ -6,9 +6,14 @@ using System.Threading.Tasks;
 
 namespace Game_World
 {
-    public class PlayerCharacter : Character, IObserver
+    public class QuestNPC : IObserver
     {
-        public PlayerCharacter(string name) : base(name) { }
+        public string Name { get; set; }
+
+        public QuestNPC(string name)
+        {
+            Name = name;
+        }
 
         public void Update(string questStatus)
         {
@@ -16,3 +21,4 @@ namespace Game_World
         }
     }
 }
+

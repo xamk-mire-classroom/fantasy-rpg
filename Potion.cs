@@ -1,22 +1,26 @@
-﻿using Game_World;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public class Potion : Item
+namespace Game_World
 {
-    public string Effect { get; private set; }  // Unique attribute for Potion (what it does)
-    public int Duration { get; private set; }   // Duration of the effect in seconds
-
-    // Constructor to initialize potion-specific properties
-    public Potion(string name, ItemRarity rarity, string effect, int duration)
-        : base(name, rarity)  // Call the base class constructor
+    public class Potion : Item
     {
-        Effect = effect;
-        Duration = duration;
-    }
+        public string Effect { get; set; }
+        public int Duration { get; set; }
 
-    // Override the method to display Potion-specific details
-    public override void DisplayInfo()
-    {
-        base.DisplayInfo();  // Call base method to display common item info
-        Console.WriteLine($"Effect: {Effect}, Duration: {Duration} seconds");
+        public Potion(string name, ItemRarity rarity, string effect, int duration)
+            : base(name, rarity)
+        {
+            Effect = effect;
+            Duration = duration;
+        }
+
+        public override void DisplayStats()
+        {
+            Console.WriteLine($"Potion: {Name} | Rarity: {Rarity} | Effect: {Effect} | Duration: {Duration}s");
+        }
     }
 }

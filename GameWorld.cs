@@ -1,61 +1,80 @@
 ﻿using System;
 using System.Collections.Generic;
 
-public class GameWorld
+namespace Game_World
 {
-    private static GameWorld _instance;  // Holds the single instance of GameWorld
-    private static readonly object _lock = new object();  // Lock object for thread safety
-
-    // Game state variables
-    public string TimeOfDay { get; private set; }
-    public string Weather { get; private set; }
-    public List<string> Npcs { get; private set; }  // List to store NPCs
-    public string[,] WorldMap { get; private set; }  // 2D array for the world map
-
-    // Private constructor to prevent instantiation from outside the class
-    private GameWorld()
+    public class GameWorld
     {
-        TimeOfDay = "Day";  // Default values
-        Weather = "Sunny";
-        Npcs = new List<string>();
-        WorldMap = CreateWorldMap();
-    }
+        // Static instance of the class
+        private static GameWorld instance = null;
 
-    // Public property to provide global access to the instance
-    public static GameWorld Instance
-    {
-        get
+        // Lock object for thread safety (optional for this use case)
+        private static readonly object lockObj = new object();
+
+        // Properties for the Game World
+        public List<string> WorldMap { get; private set; }
+        public List<NPC> NPCs { get; private set; }
+        public string TimeOfDay { get; set; }
+        public string Weather { get; set; }
+
+        // Private constructor to prevent external instantiation
+        private GameWorld()
         {
-            if (_instance == null)  // Check if instance is null
+            // Initialize the game world
+            WorldMap = new List<string> { "Village", "Forest", "Mountain", "Castle" };
+            NPCs = new List<NPC>
             {
-                lock (_lock)  // Lock to prevent multiple threads from creating an instance
+                new NPC("John", "Merchant"),
+                new NPC("Lucy", "Warrior"),
+                new NPC("Elder", "Guide")
+            };
+            TimeOfDay = "Morning";
+            Weather = "Sunny";
+        }
+
+        // Public method to get the single instance of GameWorld
+        public static GameWorld Instance
+        {
+            get
+            {
+                // Ensure thread safety (optional for single-threaded console apps)
+                lock (lockObj)
                 {
-                    if (_instance == null)  // Double-check to ensure instance is still null
+                    if (instance == null)
                     {
-                        _instance = new GameWorld();  // Create the instance
+                        instance = new GameWorld();
                     }
                 }
+                return instance;
             }
-            return _instance;  // Return the singleton instance
+        }
+
+        // Method to display the game world's current state
+        public void DisplayState()
+        {
+            Console.WriteLine("World Map Locations: " + string.Join(", ", WorldMap));
+            Console.WriteLine("NPCs in the Game:");
+            foreach (var npc in NPCs)
+            {
+                Console.WriteLine($"- {npc.Name}, Role: {npc.Role}");
+            }
+            Console.WriteLine($"Time of Day: {TimeOfDay}");
+            Console.WriteLine($"Weather: {Weather}");
         }
     }
 
-    // Method to create a basic world map (e.g., a grid)
-    private string[,] CreateWorldMap()
+    // NPC class for storing Non-Player Characters
+    public class NPC
     {
-        return new string[10, 10];  // 10x10 grid
+        public string Name { get; set; }
+        public string Role { get; set; }
+
+        public NPC(string name, string role)
+        {
+            Name = name;
+            Role = role;
+        }
     }
 
-    // Method to add an NPC to the game world
-    public void AddNpc(string npc)
-    {
-        Npcs.Add(npc);
-    }
-
-    // Method to update game state variables
-    public void UpdateGameState(string timeOfDay, string weather)
-    {
-        TimeOfDay = timeOfDay;
-        Weather = weather;
-    }
+    
 }

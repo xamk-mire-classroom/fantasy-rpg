@@ -1,26 +1,41 @@
-﻿public abstract class Enemy
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Game_World
 {
-    public string Name { get; set; }
-    public int Health { get; set; }
-    public int Mana { get; set; }
-    public int Strength { get; set; }
-    public int Agility { get; set; }
-    public string Rank { get; set; }  // Ranking to indicate the level or class of the enemy
-
-    public Enemy(string name, int health, int mana, int strength, int agility, string rank)
+    public abstract class Enemy
     {
-        Name = name;
-        Health = health;
-        Mana = mana;
-        Strength = strength;
-        Agility = agility;
-        Rank = rank;
+        public string Name { get; set; }
+        public int Health { get; set; }
+        public int Mana { get; set; }
+        public int Strength { get; set; }
+        public int Agility { get; set; }
+        public string Rank { get; set; } // E.g., "Normal", "Elite", "Boss"
+
+        public Enemy(string name, string rank)
+        {
+            Name = name;
+            Rank = rank;
+        }
+
+        public virtual void Move()
+        {
+            Console.WriteLine($"{Name} is moving.");
+        }
+
+        public virtual void Attack()
+        {
+            Console.WriteLine($"{Name} attacks with {Strength} strength.");
+        }
+
+        public virtual void DisplayStats()
+        {
+            Console.WriteLine($"Enemy: {Name} (Rank: {Rank})");
+            Console.WriteLine($"Health: {Health}, Mana: {Mana}");
+            Console.WriteLine($"Strength: {Strength}, Agility: {Agility}");
+        }
     }
-
-    // Basic actions for enemies
-    public abstract void Attack();
-    public abstract void Move();
-
-    // Prototype method for cloning
-    public abstract Enemy Clone();
 }
