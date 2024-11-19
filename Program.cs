@@ -116,6 +116,7 @@ namespace Game_World
                 if (key == ConsoleKey.Q)
                 {
                     Console.WriteLine("\nExiting the game. Goodbye!");
+                    Console.ReadLine();
                     isRunning = false;
                 }
                 else
@@ -126,6 +127,7 @@ namespace Game_World
                     if (enemy.Health <= 0)
                     {
                         Console.WriteLine($"\n{enemy.Name} has been defeated! You win!");
+                        Console.ReadLine();
                         isRunning = false; // End the game loop
                     }
                 }
