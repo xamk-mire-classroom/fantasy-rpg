@@ -139,6 +139,8 @@ namespace Game_World
         }
 
         // Inventory Management Function
+       
+
         static void ManageInventory(Character character)
         {
             bool managingInventory = true;
@@ -146,9 +148,10 @@ namespace Game_World
             while (managingInventory)
             {
                 Console.WriteLine("\nInventory Management:");
-                Console.WriteLine("1. Add Weapon");
+                Console.WriteLine("1. Add Item");
                 Console.WriteLine("2. View Inventory");
-                Console.WriteLine("3. Exit Inventory Management");
+                Console.WriteLine("3. Remove Item");
+                Console.WriteLine("4. Exit Inventory Management");
 
                 Console.Write("Enter your choice: ");
                 string choice = Console.ReadLine();
@@ -156,7 +159,7 @@ namespace Game_World
                 switch (choice)
                 {
                     case "1":
-                        AddWeaponToInventory(character);
+                        AddItemToInventory(character);
                         break;
 
                     case "2":
@@ -164,6 +167,12 @@ namespace Game_World
                         break;
 
                     case "3":
+                        Console.Write("Enter the name of the item to remove: ");
+                        string itemName = Console.ReadLine();
+                        character.Inventory.RemoveItem(itemName);
+                        break;
+
+                    case "4":
                         managingInventory = false;
                         Console.WriteLine("Exiting Inventory Management...");
                         break;
@@ -175,35 +184,86 @@ namespace Game_World
             }
         }
 
-        // Function to Add Weapon to Inventory
-        static void AddWeaponToInventory(Character character)
+        // Add Item to Inventory
+        static void AddItemToInventory(Character character)
         {
-            Console.Write("Enter Weapon Name: ");
-            string name = Console.ReadLine();
+            Console.WriteLine("Select item type to add: 1. Weapon, 2. Defensive, 3. Utility");
+            string itemTypeChoice = Console.ReadLine();
 
-            Console.Write("Enter Weapon Rarity (Common, Rare, Legendary): ");
-            ItemRarity rarity;
-            while (!Enum.TryParse(Console.ReadLine(), true, out rarity))
+            switch (itemTypeChoice)
             {
-                Console.Write("Invalid rarity. Please enter Common, Rare, or Legendary: ");
-            }
+                case "1":
+                    Console.Write("Enter Weapon Name: ");
+                    string weaponName = Console.ReadLine();
+                    Console.Write("Enter Weapon Damage: ");
+                    int weaponDamage = int.Parse(Console.ReadLine());
+                    Weapon weapon = new Weapon(weaponName, ItemRarity.Common, weaponDamage, WeaponTypeEnum.Melee);
+                    character.Inventory.AddItemAndAssignToEquipment(weapon, character);
+                    break;
 
-            Console.Write("Enter Weapon Damage: ");
-            int damage;
-            while (!int.TryParse(Console.ReadLine(), out damage) || damage <= 0)
-            {
-                Console.Write("Invalid damage. Please enter a positive number: ");
-            }
+                case "2":
+                    Console.Write("Enter Defensive Item Name: ");
+                    string defensiveName = Console.ReadLine();
+                    Console.Write("Enter Defense Value: ");
+                    int defense = int.Parse(Console.ReadLine());
+                    DefensiveItem defensiveItem = new DefensiveItem(defensiveName, ItemRarity.Common, defense);
+                    character.Inventory.AddItemAndAssignToEquipment(defensiveItem, character);
+                    break;
 
-            Console.Write("Enter Weapon Type (Melee, Ranged, Magic): ");
-            WeaponTypeEnum weaponType;
-            while (!Enum.TryParse(Console.ReadLine(), true, out weaponType))
-            {
-                Console.Write("Invalid type. Please enter Melee, Ranged, or Magic: ");
-            }
+                case "3":
+                    Console.Write("Enter Utility Item Name: ");
+                    string utilityName = Console.ReadLine();
+                    Console.Write("Enter Effect: ");
+                    string effect = Console.ReadLine();
+                    UtilityItem utilityItem = new UtilityItem(utilityName, ItemRarity.Common, effect);
+                    character.Inventory.AddItemAndAssignToEquipment(utilityItem, character);
+                    break;
 
-            Weapon weapon = new Weapon(name, rarity, damage, weaponType);
-            character.Inventory.AddItem(weapon);
+                default:
+                    Console.WriteLine("Invalid choice.");
+                    break;
+            
         }
+
+        Console.WriteLine("Select slot to unequip: 1. Weapon, 2. Defensive, 3. Utility, 4. Skip");
+            string slotChoice = Console.ReadLine();
+
+            if (slotChoice == "4")
+            {
+                Console.WriteLine("Skipping unequipping process...");
+            }
+            else
+            {
+                try
+                {
+                    EquipmentSlotType slotType = slotChoice switch
+                    {
+                        "1" => EquipmentSlotType.Weapon,
+                        "2" => EquipmentSlotType.Defensive,
+                        "3" => EquipmentSlotType.Utility,
+                        _ => throw new ArgumentException("Invalid slot type.")
+                    };
+
+                    character.UnequipItem(slotType);
+                }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+
+
+        }
+
+
+
+
+
+
     }
+
+
+
+
+
 }
