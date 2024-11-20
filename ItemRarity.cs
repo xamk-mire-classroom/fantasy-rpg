@@ -6,12 +6,6 @@ using System.Threading.Tasks;
 
 namespace Game_World
 {
-    public enum ItemRarity
-    {
-        Common,
-        Magical,
-        Rare,
-        Legendary
-    }
+  
 
 }

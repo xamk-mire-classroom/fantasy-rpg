@@ -9,6 +9,7 @@ namespace Game_World
     public enum WeaponTypeEnum
     {
         Melee,
-        Ranged
+        Ranged,
+        Magic
     }
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Game_World
+﻿namespace Game_World
 {
     public class Weapon : Item
     {
@@ -12,7 +6,7 @@ namespace Game_World
         public WeaponTypeEnum WeaponType { get; set; }
 
         public Weapon(string name, ItemRarity rarity, int damage, WeaponTypeEnum weaponType)
-            : base(name, rarity)
+            : base(name, rarity, "Weapon")
         {
             Damage = damage;
             WeaponType = weaponType;
@@ -23,4 +17,6 @@ namespace Game_World
             Console.WriteLine($"Weapon: {Name} | Rarity: {Rarity} | Damage: {Damage} | Type: {WeaponType}");
         }
     }
+
+   
 }

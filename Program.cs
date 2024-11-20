@@ -9,15 +9,13 @@ namespace Game_World
             // Get the single instance of GameWorld
             GameWorld gameWorld = GameWorld.Instance;
 
-            // Display the current state of the game world
-            gameWorld.DisplayState();
 
-            // Modify game state
+            // Modify the game state
             gameWorld.TimeOfDay = "Evening";
             gameWorld.Weather = "Rainy";
 
             // Display the updated state
-            Console.WriteLine("\nUpdated Game State:");
+            Console.WriteLine("\nGame State:");
             gameWorld.DisplayState();
 
             // Character Creation
@@ -41,11 +39,15 @@ namespace Game_World
             }
             catch (ArgumentException e)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine($"\nError: {e.Message}");
                 return;
             }
 
+            // Inventory Management
+            ManageInventory(character);
+
             // Enemy Creation
+            Enemy enemy;
             Console.WriteLine("\nEnemy Creation!");
 
             Console.Write("Enter enemy type (Slime, Goblin, Dragon): ");
@@ -54,30 +56,26 @@ namespace Game_World
             Console.Write("Enter enemy rank (Normal, Elite, Boss): ");
             string enemyRank = Console.ReadLine();
 
-            Enemy enemy;
             try
             {
                 // Create enemy using the factory
                 enemy = EnemyFactory.CreateEnemy(enemyType, enemyRank);
 
-                // Display enemy stats and actions
+                // Display enemy stats
+                Console.WriteLine("\nEnemy Created!");
                 enemy.DisplayStats();
-                enemy.Move();
-                enemy.Attack();
             }
             catch (ArgumentException e)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine($"\nError: {e.Message}");
                 return;
             }
 
             // Quest Notifications
             QuestManager questManager = new QuestManager();
-            PlayerCharacter player = new PlayerCharacter(characterName);
             QuestNPC villager = new QuestNPC("Villager");
             QuestNPC blacksmith = new QuestNPC("Blacksmith");
 
-            questManager.RegisterObserver(player);
             questManager.RegisterObserver(villager);
             questManager.RegisterObserver(blacksmith);
 
@@ -116,7 +114,6 @@ namespace Game_World
                 if (key == ConsoleKey.Q)
                 {
                     Console.WriteLine("\nExiting the game. Goodbye!");
-                    Console.ReadLine();
                     isRunning = false;
                 }
                 else
@@ -127,8 +124,7 @@ namespace Game_World
                     if (enemy.Health <= 0)
                     {
                         Console.WriteLine($"\n{enemy.Name} has been defeated! You win!");
-                        Console.ReadLine();
-                        isRunning = false; // End the game loop
+                        isRunning = false;
                     }
                 }
             }
@@ -137,6 +133,77 @@ namespace Game_World
             Console.WriteLine("\nFinal Stats:");
             character.DisplayStats();
             enemy.DisplayStats();
+
+            Console.WriteLine("\nThank you for playing!");
+            Console.ReadLine(); // Wait for user input before closing
+        }
+
+        // Inventory Management Function
+        static void ManageInventory(Character character)
+        {
+            bool managingInventory = true;
+
+            while (managingInventory)
+            {
+                Console.WriteLine("\nInventory Management:");
+                Console.WriteLine("1. Add Weapon");
+                Console.WriteLine("2. View Inventory");
+                Console.WriteLine("3. Exit Inventory Management");
+
+                Console.Write("Enter your choice: ");
+                string choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        AddWeaponToInventory(character);
+                        break;
+
+                    case "2":
+                        character.Inventory.ListItems();
+                        break;
+
+                    case "3":
+                        managingInventory = false;
+                        Console.WriteLine("Exiting Inventory Management...");
+                        break;
+
+                    default:
+                        Console.WriteLine("Invalid choice. Please try again.");
+                        break;
+                }
+            }
+        }
+
+        // Function to Add Weapon to Inventory
+        static void AddWeaponToInventory(Character character)
+        {
+            Console.Write("Enter Weapon Name: ");
+            string name = Console.ReadLine();
+
+            Console.Write("Enter Weapon Rarity (Common, Rare, Legendary): ");
+            ItemRarity rarity;
+            while (!Enum.TryParse(Console.ReadLine(), true, out rarity))
+            {
+                Console.Write("Invalid rarity. Please enter Common, Rare, or Legendary: ");
+            }
+
+            Console.Write("Enter Weapon Damage: ");
+            int damage;
+            while (!int.TryParse(Console.ReadLine(), out damage) || damage <= 0)
+            {
+                Console.Write("Invalid damage. Please enter a positive number: ");
+            }
+
+            Console.Write("Enter Weapon Type (Melee, Ranged, Magic): ");
+            WeaponTypeEnum weaponType;
+            while (!Enum.TryParse(Console.ReadLine(), true, out weaponType))
+            {
+                Console.Write("Invalid type. Please enter Melee, Ranged, or Magic: ");
+            }
+
+            Weapon weapon = new Weapon(name, rarity, damage, weaponType);
+            character.Inventory.AddItem(weapon);
         }
     }
 }
