@@ -19,23 +19,26 @@ namespace Game_World
             gameWorld.DisplayState();
 
             // Character Creation
-            Character character = CreateCharacter();
+            PlayerCharacter player = CreatePlayerCharacter();
+
+            // Explore Game World
+            ExploreGameWorld(gameWorld, player);
 
             // Inventory Management
-            ManageInventory(character);
+            ManageInventory(player);
 
             // Enemy Creation
             List<Enemy> enemies = CreateEnemies();
 
             // Start Combat
-            StartCombat(character, enemies);
+            StartCombat(player, enemies);
 
             Console.WriteLine("\nThank you for playing!");
             Console.ReadLine(); // Wait for user input before closing
         }
 
         // Character Creation
-        static Character CreateCharacter()
+        static PlayerCharacter CreatePlayerCharacter()
         {
             Console.WriteLine("\nWelcome to the Character Creation!");
 
@@ -50,17 +53,62 @@ namespace Game_World
                 Character character = CharacterFactory.CreateCharacter(characterType, characterName);
                 Console.WriteLine("\nCharacter Created!");
                 character.DisplayStats();
-                return character;
+
+                // Return as PlayerCharacter (downcasting)
+                return new PlayerCharacter(character.Name);
             }
             catch (ArgumentException e)
             {
                 Console.WriteLine($"\nError: {e.Message}");
-                return CreateCharacter(); // Retry on invalid input
+                return CreatePlayerCharacter(); // Retry on invalid input
+            }
+        }
+
+        // Explore Game World
+        static void ExploreGameWorld(GameWorld gameWorld, PlayerCharacter player)
+        {
+            bool exploring = true;
+
+            while (exploring)
+            {
+                Console.WriteLine("\nChoose a location to visit:");
+                for (int i = 0; i < gameWorld.WorldMap.Count; i++)
+                {
+                    Console.WriteLine($"{i + 1}. {gameWorld.WorldMap[i]}");
+                }
+                Console.Write("Enter your choice (or 0 to exit): ");
+                string input = Console.ReadLine();
+
+                if (int.TryParse(input, out int choice) && choice > 0 && choice <= gameWorld.WorldMap.Count)
+                {
+                    string location = gameWorld.WorldMap[choice - 1];
+                    Console.WriteLine($"\nYou arrived at {location}.");
+
+                    foreach (var npc in gameWorld.LocationNPCs[location])
+                    {
+                        Console.WriteLine($"\nInteract with {npc.Name} ({npc.Role})? (yes/no)");
+                        string response = Console.ReadLine()?.ToLower();
+
+                        if (response == "yes" && npc is NPC questNpc)
+                        {
+                            questNpc.Interact(player);
+                        }
+                    }
+                }
+                else if (choice == 0)
+                {
+                    exploring = false;
+                    Console.WriteLine("Exiting exploration...");
+                }
+                else
+                {
+                    Console.WriteLine("Invalid choice. Try again.");
+                }
             }
         }
 
         // Inventory Management Function
-        static void ManageInventory(Character character)
+        static void ManageInventory(PlayerCharacter player)
         {
             bool managingInventory = true;
 
@@ -70,7 +118,8 @@ namespace Game_World
                 Console.WriteLine("1. Add Item");
                 Console.WriteLine("2. View Inventory");
                 Console.WriteLine("3. Remove Item");
-                Console.WriteLine("4. Exit Inventory Management");
+                Console.WriteLine("4. View Active Quests");
+                Console.WriteLine("5. Exit Inventory Management");
 
                 Console.Write("Enter your choice: ");
                 string choice = Console.ReadLine();
@@ -78,20 +127,24 @@ namespace Game_World
                 switch (choice)
                 {
                     case "1":
-                        AddItemToInventory(character);
+                        AddItemToInventory(player);
                         break;
 
                     case "2":
-                        character.Inventory.ListItems();
+                        player.Inventory.ListItems();
                         break;
 
                     case "3":
                         Console.Write("Enter the name of the item to remove: ");
                         string itemName = Console.ReadLine();
-                        character.Inventory.RemoveItem(itemName);
+                        player.Inventory.RemoveItem(itemName);
                         break;
 
                     case "4":
+                        player.DisplayActiveQuests();
+                        break;
+
+                    case "5":
                         managingInventory = false;
                         Console.WriteLine("Exiting Inventory Management...");
                         break;
@@ -104,7 +157,7 @@ namespace Game_World
         }
 
         // Add Item to Inventory
-        static void AddItemToInventory(Character character)
+        static void AddItemToInventory(PlayerCharacter player)
         {
             Console.WriteLine("Select item type to add: 1. Weapon, 2. Defensive, 3. Utility");
             string itemTypeChoice = Console.ReadLine();
@@ -119,7 +172,7 @@ namespace Game_World
                         Console.Write("Enter Weapon Damage: ");
                         int weaponDamage = int.Parse(Console.ReadLine());
                         Weapon weapon = new Weapon(weaponName, ItemRarity.Common, weaponDamage, WeaponTypeEnum.Melee);
-                        character.Inventory.AddItemAndAssignToEquipment(weapon, character);
+                        player.Inventory.AddItemAndAssignToEquipment(weapon, player);
                         break;
 
                     case "2":
@@ -128,7 +181,7 @@ namespace Game_World
                         Console.Write("Enter Defense Value: ");
                         int defense = int.Parse(Console.ReadLine());
                         DefensiveItem defensiveItem = new DefensiveItem(defensiveName, ItemRarity.Common, defense);
-                        character.Inventory.AddItemAndAssignToEquipment(defensiveItem, character);
+                        player.Inventory.AddItemAndAssignToEquipment(defensiveItem, player);
                         break;
 
                     case "3":
@@ -137,7 +190,7 @@ namespace Game_World
                         Console.Write("Enter Effect: ");
                         string effect = Console.ReadLine();
                         UtilityItem utilityItem = new UtilityItem(utilityName, ItemRarity.Common, effect);
-                        character.Inventory.AddItemAndAssignToEquipment(utilityItem, character);
+                        player.Inventory.AddItemAndAssignToEquipment(utilityItem, player);
                         break;
 
                     default:
@@ -186,13 +239,13 @@ namespace Game_World
         }
 
         // Start Combat
-        static void StartCombat(Character character, List<Enemy> enemies)
+        static void StartCombat(PlayerCharacter player, List<Enemy> enemies)
         {
-            CombatManager combatManager = new CombatManager(new List<Character> { character }, enemies);
+            CombatManager combatManager = new CombatManager(new List<Character> { player }, enemies);
             combatManager.StartCombat();
 
             Console.WriteLine("\nFinal Stats:");
-            character.DisplayStats();
+            player.DisplayStats();
             foreach (var enemy in enemies)
             {
                 enemy.DisplayStats();
